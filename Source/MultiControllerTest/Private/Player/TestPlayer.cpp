@@ -5,6 +5,9 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "DrawDebugHelpers.h"
 
+DEFINE_LOG_CATEGORY(LogAuthority);
+DEFINE_LOG_CATEGORY(LogClient);
+
 ATestPlayer::ATestPlayer()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -16,6 +19,7 @@ void ATestPlayer::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	DebugDisplay();
+	DebugLog();
 }
 
 void ATestPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -129,6 +133,28 @@ void ATestPlayer::DebugDisplay()
 	else
 	{
 		DrawDebugString(GetWorld(), GetActorLocation(), debugString, nullptr, FColor::Black, 0);
+	}
+}
+
+void ATestPlayer::DebugLog()
+{
+	FString debugString = TEXT("");
+	
+	debugString += FString::Printf(TEXT("%s"), HasAuthority() ? TEXT("[Authority]") : TEXT("[Client]"));
+
+	debugString += FString::Printf(TEXT(", Pawn: %s"), *GetActorNameOrLabel());
+	debugString += FString::Printf(TEXT(", LocalRole: %s"), *UEnum::GetDisplayValueAsText(GetLocalRole()).ToString());
+	debugString += FString::Printf(TEXT(", Controller: %s"), Controller ? TEXT("true") : TEXT("false"));
+	debugString += FString::Printf(TEXT(", IsLocallyControlled(): %s"), IsLocallyControlled() ? TEXT("true") : TEXT("false"));
+	debugString += FString::Printf(TEXT(", PlayerState: %s"), GetPlayerState() ? TEXT("true") : TEXT("false"));
+
+	if (HasAuthority())
+	{
+		UE_LOG(LogAuthority, Log, TEXT("%s"), *debugString);
+	}
+	else
+	{
+		UE_LOG(LogClient, Log, TEXT("%s"), *debugString);
 	}
 }
 
