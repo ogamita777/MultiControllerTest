@@ -2,6 +2,8 @@
 ## 概要
 UnrealEngineでのマルチプレイ時のPawnのIsLocallyControlled()の検証用プロジェクトです。
 
+検証内容は [【UE5】マルチプレイにおけるPawnのIsLocallyControlled()の各状況での値まとめ](https://github.com/ogamita777/MultiControllerTest) に投稿いたいしました。
+
 ## 環境
 - UnrealEngine 5.5.4
 
