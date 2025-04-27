@@ -24,5 +24,5 @@ MultiControllerTest\Saved\StagedBuilds\Windows にパッケージは配置され
 ### Editor/Launch_Stage_ListenServer.bat
 パッケージをListenServerで起動します。
 
-### Editor/Launch_Stage_ListenServer.bat
+### Editor/Launch_Stage_Client.bat
 パッケージをClient(127.0.0.1に繋ぐ)で起動します。
