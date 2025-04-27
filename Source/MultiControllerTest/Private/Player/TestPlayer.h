@@ -4,9 +4,6 @@
 #include "GameFramework/Character.h"
 #include "TestPlayer.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogAuthority, Log, All);
-DECLARE_LOG_CATEGORY_EXTERN(LogClient, Log, All);
-
 UCLASS()
 class ATestPlayer : public ACharacter
 {
@@ -16,6 +13,7 @@ public:
 	ATestPlayer();
 
 public:
+	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -28,4 +26,9 @@ private:
 
 	void DebugDisplay();
 	void DebugLog();
+
+	void Respawn();
+
+	UFUNCTION(Server, Reliable)
+	void Server_Respawn();
 };

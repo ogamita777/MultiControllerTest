@@ -6,6 +6,7 @@
 ATestGameModeBase::ATestGameModeBase()
 	: m_spawnIndex(0)
 {
+	bUseSeamlessTravel = true;
 }
 
 AActor* ATestGameModeBase::ChoosePlayerStart_Implementation(AController* Player)

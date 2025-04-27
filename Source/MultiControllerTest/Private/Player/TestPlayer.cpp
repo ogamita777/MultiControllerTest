@@ -2,16 +2,32 @@
 
 #include "GameFramework/PlayerInput.h"
 #include "GameFramework/PlayerState.h"
+#include "GameMode/TestGameModeBase.h"
+#include "TestDefine.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "DrawDebugHelpers.h"
-
-DEFINE_LOG_CATEGORY(LogAuthority);
-DEFINE_LOG_CATEGORY(LogClient);
 
 ATestPlayer::ATestPlayer()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+}
+
+void ATestPlayer::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (HasAuthority())
+	{
+		UE_LOG(LogAuthority, Log, TEXT("BeginPlay()"));
+	}
+	else
+	{
+		UE_LOG(LogClient, Log, TEXT("BeginPlay()"));
+	}
+
+	DebugDisplay();
+	DebugLog();
 }
 
 void ATestPlayer::Tick(float DeltaTime)
@@ -31,6 +47,8 @@ void ATestPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAxis("MoveForward", this, &ATestPlayer::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ATestPlayer::MoveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &ATestPlayer::AddControllerYawInput);
+
+	PlayerInputComponent->BindAction("Respawn", IE_Pressed, this, &ATestPlayer::Respawn);
 }
 
 void ATestPlayer::InitializeInputBindings()
@@ -49,6 +67,8 @@ void ATestPlayer::InitializeInputBindings()
 	UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("MoveRight", EKeys::A, -1.f));
 	UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("MoveRight", EKeys::D, 1.f));
 	UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("Turn", EKeys::MouseX, 1.f));
+
+	UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping("Respawn", EKeys::R));
 }
 
 void ATestPlayer::MoveForward(float value)
@@ -158,3 +178,31 @@ void ATestPlayer::DebugLog()
 	}
 }
 
+void ATestPlayer::Respawn()
+{
+	if (HasAuthority())
+	{
+		UE_LOG(LogAuthority, Log, TEXT("Respawn()"));
+	}
+	else
+	{
+		UE_LOG(LogClient, Log, TEXT("Respawn()"));
+	}
+
+	Server_Respawn();
+}
+
+void ATestPlayer::Server_Respawn_Implementation()
+{
+	UE_LOG(LogAuthority, Log, TEXT("Server_Respawn_Implementation()"));
+
+	ATestGameModeBase* gameMode = GetWorld()->GetAuthGameMode<ATestGameModeBase>();
+	AController* controller = Controller;
+
+	Destroy();
+
+	if (gameMode)
+	{
+		gameMode->RestartPlayer(controller);
+	}
+}
