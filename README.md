@@ -1,15 +1,21 @@
 # MultiControllerTest
 ## 概要
-UnrealEngineでのマルチプレイ時のPawnのIsLocallyControled()の検証用プロジェクトです。
+UnrealEngineでのマルチプレイ時のPawnのIsLocallyControlled()の検証用プロジェクトです。
 
 ## 環境
 - UnrealEngine 5.5.4
+
+## 操作方法
+- 移動：WASD
+- カメラ操作：マウス
+- リスポーン：R
+    - その環境のIsLocallyControlled()がtrueのPawnに対して(※厳密には元のPawnは削除)RestartPlayer()を行います
 
 ## ツール
 Toolフォルダに各種ツールが格納されています。
 
 ### Editor/MakePackage.bat
-Developtmentの構成でパッケージ作成します。　　
+Developtmentの構成でパッケージ作成します。  
 MultiControllerTest\Saved\StagedBuilds\Windows にパッケージは配置されます。  
 デフォルトパスの C:\Program Files\Epic Games\UE_5.5 にUnrealEngine5.5が格納されている場合に動作します。
 
