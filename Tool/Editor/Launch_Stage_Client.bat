@@ -1,5 +1,7 @@
 @echo off
 
+cd %~dp0
+
 pushd ..\..
 set PROJECT_ROOT=%CD%
 popd
